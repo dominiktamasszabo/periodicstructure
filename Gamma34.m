@@ -24,7 +24,8 @@ for posi = 1:2*Resolution
     for vi = 1:length(q_vec)
         q_testing = chargeWeight*[zeros(1, vi-1), 1, zeros(1, length(q_vec)-vi)];
         [e_x, e_y, e_z] = tererosseg(Gamma34_x(posi), Gamma34_y(posi), q_testing);
-        Gamma34_Matrix(posi, vi) = e_y; % Ez a normalis komponens
+%         disp(e_y)
+        Gamma34_Matrix(posi, vi) = e_y/e_x; % Ez a normalis komponens
     end
 end
 

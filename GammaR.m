@@ -24,8 +24,9 @@ for posi = 1:Resolution
 
         [e_x, e_y, e_z] = tererosseg(Gamma1_x(posi), Gamma1_y(posi), q_testing);
         e_t = e_x*sin(angles(posi))-e_y*cos(angles(posi));
+        e_r = sqrt(e_x^2+e_y^2);
 %         disp([e_x, e_y, e_t]);
-        GammaR_Matrix(posi, vi) = e_t; % Ez a tangencialis komponens
+        GammaR_Matrix(posi, vi) = e_t/e_r; % Ez a tangencialis komponens
     end
 end
 % A várt potenciál vektor

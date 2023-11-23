@@ -1,7 +1,7 @@
 clc; clear;
 [eps_r, eps_0, M, phi_0, K, R, c, deltaX, deltaY, r_0, N1, N2, d, h, Resolution, V, chargeWeight] = defineConstants();
 
-q_vec = 1e-9*zeros(1,Resolution);
+q_vec = zeros(1,4*Resolution);
 
 
 
@@ -14,27 +14,27 @@ q_vec = 1e-9*zeros(1,Resolution);
 [G2, b2] = Gamma2(q_vec);
 [G34, b34] = Gamma34(q_vec);
 [GR, bR] = GammaR(q_vec);
+% 
+% % Együttható normalizálás
+% mu1 = mean(abs(G1'))';
+% mu2 = mean(abs(G2'))';
+% mu34 = mean(abs(G34'))';
+% muR = mean(abs(GR'))';
+% 
+% % Próbálkozás: leosztok a sorok abszolutértékének átlagaival 
+% G1 = G1./mu1;
+% G2 = G2./mu2;
+% G34 = G34./mu34;
+% GR = GR./muR;
+% 
+% b1 = b1 ./ mu1;
+% b2 = b2 ./ mu2;
+% b34 = b34 ./ mu34;
+% bR = bR ./ muR;
 
-% Együttható normalizálás
-mu1 = mean(abs(G1'))';
-mu2 = mean(abs(G2'))';
-mu34 = mean(abs(G34'))';
-muR = mean(abs(GR'))';
-
-% Próbálkozás: leosztok a sorok abszolutértékének átlagaival 
-G1 = G1./mu1;
-G2 = G2./mu2;
-G34 = G34./mu34;
-GR = GR./muR;
-
-b1 = b1 ./ mu1;
-b2 = b2 ./ mu2;
-b34 = b34 ./ mu34;
-bR = bR ./ muR;
-
-
-A = [G1;G2;G34;GR];
-b = [b1;b2;b34;bR];
+S = ones(1,length(q_vec));
+A = [S;G1;G2;G34;GR];
+b = [0;b1;b2;b34;bR];
 
 % 
 %  A = [G1;G2];
@@ -44,6 +44,9 @@ b = [b1;b2;b34;bR];
 % b = bR;
 
 q_vec = chargeWeight*( A\b)';
+
+
+disp("kesz");
 
 
 
@@ -111,13 +114,18 @@ figure_potential = figure;
   xlabel('x'); ylabel('y'); 
   zlabel('Phi');
 
-  
+
 % Gamma1 Potenciál  
-figure; plot(yy(:,1), phi(:,1))
+figure; 
+plot(yy(:,1), phi(:,1))
 title('Gamma1 Potenciál');
 xlabel('A tér y koordinátája');
 ylabel('Potenciál(V)');
 % axis([-0.5*10^-3 0.5*10^-3 -1 1]);
+
+
+
+
 
 % Gamma1 Potenciál  
 figure; plot(yy(:,Resolution), phi(:,Resolution))
