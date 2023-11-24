@@ -15,24 +15,7 @@ cVec = (A\b)';
 
 disp("kesz");
 
-sum(cVec)
-
-%% INNEN ÁBRÁZOLÁS
-
-figure;
-% plot3(cPMat(1,:), cPMat(2,:), cVec, 'o', 'Color', [1 0 0]);
-scatter3(cPMat(1,:), cPMat(2,:), cVec, 'filled'); % scatter plot
-hold on;
-stem3(cPMat(1,:), cPMat(2,:), cVec, 'k-'); % stem plot with black dashed lines
-patch(1.1*c_B*[-deltaX/2, +deltaX/2, +deltaX/2, -deltaX/2], ...
-    1.1*c_B*[-deltaY/2, -deltaY/2, +deltaY/2, +deltaY/2], [0, 0, 0, 0], 'b', 'FaceAlpha', 0.3);
-hold off;
-zlabel('Töltés (pC/mm)');
-xlabel('x (mm)');ylabel('y (mm)');
-title('Töltések eloszlása az XY síkon');
-% cVecMax = max(abs(cVec(1:M)));
-% zlim([-cVecMax, +cVecMax]);
-
+chargeSum = sum(cVec);
 
 % Számolgatás
 
@@ -62,6 +45,8 @@ for vi_x = 1:length(x_vec) % vi = vector index
     end
 end
 
+E_r = sqrt(Ex.^2+Ey.^2+Ez.^2);
+
 % Potenciál kiszámítása
 
 phi = zeros(size(xx));
@@ -75,11 +60,37 @@ for vi_x = 1:length(x_vec) % vi = vector index
     end
 end
 
+% A hosszegysegre eso energia
+W_p = eps_0*eps_r*deltaX*deltaY/(Resolution^2)*sum(E_r.^2, "all")*10^-18 ; % J/m
+% A hosszegysegre eso kapacitas
+C_p = 2*N1*N2*W_p/(V^2); % F/m
+
+
+
+
+
+%% INNEN ÁBRÁZOLÁS
+
+figure('name', 'Töltéseloszlás');
+% plot3(cPMat(1,:), cPMat(2,:), cVec, 'o', 'Color', [1 0 0]);
+scatter3(cPMat(1,:), cPMat(2,:), cVec, 'filled'); % scatter plot
+hold on;
+stem3(cPMat(1,:), cPMat(2,:), cVec, 'k-'); % stem plot with black dashed lines
+patch(1.1*c_B*[-deltaX/2, +deltaX/2, +deltaX/2, -deltaX/2], ...
+    1.1*c_B*[-deltaY/2, -deltaY/2, +deltaY/2, +deltaY/2], [0, 0, 0, 0], 'b', 'FaceAlpha', 0.3);
+rectangle('Position', [-deltaX/2, -deltaY/2, deltaX, deltaY], 'EdgeColor', 'k', 'LineWidth', 0.6);
+rectangle('Position', [-R, -R, 2*R, 2*R], 'Curvature', [1, 1], 'EdgeColor', 'k', 'LineWidth', 0.6);
+hold off;
+zlabel('Töltés (pC/mm)');
+xlabel('x (mm)');ylabel('y (mm)');
+title('Töltések eloszlása az XY síkon');
+% cVecMax = max(abs(cVec(1:M)));
+% zlim([-cVecMax, +cVecMax]);
+
 % Térerősség vektorok ábrázolása
 figure('name', 'Tererosseg vektorok');
 qui = quiver(x_vec, y_vec, Ex, Ey);
-% set(qui, 'AutoScaleFactor', 10); 
-E_r = sqrt(Ex.^2+Ey.^2+Ez.^2);
+% set(qui, 'AutoScaleFactor', 10);
 
 % Térerősség abszolútérték ábrázolása
 figure('name', 'E_abs'); 

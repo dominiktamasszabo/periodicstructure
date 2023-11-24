@@ -10,7 +10,7 @@ Ey = 0;
 Ez = 0;
 
 
-if sqrt(x^2 + y^2) < R*0.95 | (x>deltaX/2) | (x<-deltaX/2) | (y>deltaY/2) | (y<-deltaY/2) % ITT AZÉRT VAN 0.95 MERT A GR IS EZT HASZNÁLJA
+if sqrt(x^2 + y^2) < R*0.99 | (x>deltaX/2) | (x<-deltaX/2) | (y>deltaY/2) | (y<-deltaY/2) % ITT AZÉRT VAN 0.95 MERT A GR IS EZT HASZNÁLJA
     % Minden 0
 else
     i = 1;

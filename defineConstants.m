@@ -13,8 +13,8 @@ deltaY = 1; % Cella Y irányú mérete [mm]
 V = 1; % Kondenzátorra kapcsolt feszültség [V]
 
 Resolution = 100; % Hány pontra osztjuk a deltaX hosszt. [1]
-N1 = 1; % Cellák száma X irányban [1]
-N2 = 1; % Cellák száma Y irányban [1]
+N1 = 10; % Cellák száma X irányban [1]
+N2 = 10; % Cellák száma Y irányban [1]
 
 M = 16; % Fémrúdon belüli vonaltöltések száma /Metal/
 B = 200; % Oldalankénti külső töltések száma /Boundary/
