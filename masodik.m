@@ -17,12 +17,24 @@ disp("kesz");
 
 sum(cVec)
 
-figure;
-plot3(cPMat(1,:), cPMat(2,:), cVec, 'o', 'Color', [1 0 0]);
-
-
-
 %% INNEN ÁBRÁZOLÁS
+
+figure;
+% plot3(cPMat(1,:), cPMat(2,:), cVec, 'o', 'Color', [1 0 0]);
+scatter3(cPMat(1,:), cPMat(2,:), cVec, 'filled'); % scatter plot
+hold on;
+stem3(cPMat(1,:), cPMat(2,:), cVec, 'k-'); % stem plot with black dashed lines
+patch(1.1*c_B*[-deltaX/2, +deltaX/2, +deltaX/2, -deltaX/2], ...
+    1.1*c_B*[-deltaY/2, -deltaY/2, +deltaY/2, +deltaY/2], [0, 0, 0, 0], 'b', 'FaceAlpha', 0.3);
+hold off;
+zlabel('Töltés (pC/mm)');
+xlabel('x (mm)');ylabel('y (mm)');
+title('Töltések eloszlása az XY síkon');
+% cVecMax = max(abs(cVec(1:M)));
+% zlim([-cVecMax, +cVecMax]);
+
+
+% Számolgatás
 
 x_vec = linspace(-deltaX/2, deltaX/2, Resolution);
 y_vec = linspace(-deltaY/2, deltaY/2, Resolution);

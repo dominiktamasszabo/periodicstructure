@@ -3,9 +3,9 @@ function [eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, de
 % Konstansok
 eps_r = 1; % Relatív permittivitás [1]
 eps_0 = 8.86; % Vákuum permittivitás [F/mm*10^12] !!! EZ NEM BIZTOS HOGY JÓ !!!!
-phi_0 = 0; % Első vonaltöltés szöge [rad]
+phi_0 = 0*2*pi/16*0.5; % Első vonaltöltés szöge [rad]
 K = 40; % Y-ra párhuzamos oldalak (Gamma1, Gamma2) diszkrét pontjainak száma //RES VAN HELYETTE HASZNÁLVA 
-R = 0.2; % A fémhenger sugara [mm]
+R = 0.13; % A fémhenger sugara [mm]
 c_R = 1/3; % A vonaltöltés-kör sugarának aránya a fémhenger sugarához [1]
 c_B = 4/3; % A külső töltések négyzetének oldalának aránya a cella oldalához
 deltaX = 1; % Cella X irányú mérete [mm]
@@ -16,8 +16,8 @@ Resolution = 100; % Hány pontra osztjuk a deltaX hosszt. [1]
 N1 = 1; % Cellák száma X irányban [1]
 N2 = 1; % Cellák száma Y irányban [1]
 
-M = 4; % Fémrúdon belüli vonaltöltések száma /Metal/
-B = 10; % Oldalankénti külső töltések száma /Boundary/
+M = 16; % Fémrúdon belüli vonaltöltések száma /Metal/
+B = 200; % Oldalankénti külső töltések száma /Boundary/
 
 % chargeWeight = 1; % Ennyivel szorozzuk a töltéseket a mátrixszámolásnál
 
