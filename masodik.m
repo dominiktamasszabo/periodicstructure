@@ -1,54 +1,24 @@
 clc; clear;
-[eps_r, eps_0, M, B, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, h, V] = defineConstants()
+[eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, h, V] = defineConstants();
+cPMat = chargePositionMatrix();
 
-q_vec = zeros(1,4*Resolution);
+[G1, b1] = Gamma1(cPMat);
+[G2, b2] = Gamma2(cPMat);
+[G34, b34] = Gamma34(cPMat);
+[GR, bR] = GammaR(cPMat);
 
-[cPMat] = chargePositionMatrix();
+S = ones(1,NoC);
+A = [S;G1;G2;GR;G34];
+b = [0;b1;b2;bR;b34];
 
-
-
-% [Ex, Ey, Ez] = tererosseg(0.4,0.4, q_vec);
-
-% q_vec = 10^-9*[1,0,0,0,0,1,0,0];
-
-
-[G1, b1] = Gamma1(q_vec);
-[G2, b2] = Gamma2(q_vec);
-[G34, b34] = Gamma34(q_vec);
-[GR, bR] = GammaR(q_vec);
-% 
-% % Együttható normalizálás
-% mu1 = mean(abs(G1'))';
-% mu2 = mean(abs(G2'))';
-% mu34 = mean(abs(G34'))';
-% muR = mean(abs(GR'))';
-% 
-% % Próbálkozás: leosztok a sorok abszolutértékének átlagaival 
-% G1 = G1./mu1;
-% G2 = G2./mu2;
-% G34 = G34./mu34;
-% GR = GR./muR;
-% 
-% b1 = b1 ./ mu1;
-% b2 = b2 ./ mu2;
-% b34 = b34 ./ mu34;
-% bR = bR ./ muR;
-
-S = ones(1,length(q_vec));
-A = [S;G1;G2;G34;GR];
-b = [0;b1;b2;b34;bR];
-
-% 
-%  A = [G1;G2];
-%  b = [b1;b2];
-% 
-% A = GR;
-% b = bR;
-
-q_vec = chargeWeight*( A\b)';
-
+cVec = (A\b)';
 
 disp("kesz");
+
+sum(cVec)
+
+figure;
+plot3(cPMat(1,:), cPMat(2,:), cVec, 'o', 'Color', [1 0 0]);
 
 
 
@@ -69,7 +39,7 @@ for vi_x = 1:length(x_vec) % vi = vector index
         mi_x = vi_y; % Matrix index X iranyban
         mi_y = vi_x; % Matrix index Y iranyban
 
-        [e_x, e_y, e_z] = tererosseg(x_vec(vi_x), y_vec(vi_y), q_vec);
+        [e_x, e_y, e_z] = tererosseg(x_vec(vi_x), y_vec(vi_y), cVec, cPMat);
         Ex(mi_x,mi_y) = e_x;
         Ey(mi_x,mi_y) = e_y;
         Ez(mi_x,mi_y) = e_z;
@@ -89,48 +59,42 @@ for vi_x = 1:length(x_vec) % vi = vector index
         mi_x = vi_y; % Matrix index X iranyban
         mi_y = vi_x; % Matrix index Y iranyban
 
-        phi(mi_x, mi_y) = potencial(x_vec(vi_x), y_vec(vi_y), q_vec);
+        phi(mi_x, mi_y) = potencial(x_vec(vi_x), y_vec(vi_y), cVec, cPMat);
     end
 end
 
-
 % Térerősség vektorok ábrázolása
-figure;
+figure('name', 'Tererosseg vektorok');
 qui = quiver(x_vec, y_vec, Ex, Ey);
 % set(qui, 'AutoScaleFactor', 10); 
 E_r = sqrt(Ex.^2+Ey.^2+Ez.^2);
 
 % Térerősség abszolútérték ábrázolása
-figure; 
+figure('name', 'E_abs'); 
   h = surf(xx,yy,E_r );
   set(h, 'edgeColor', 'none', 'faceAlpha', 0.5, 'faceLighting', 'flat');
   xlabel('x'); ylabel('y'); 
   zlabel('E');
 
-
 % Potenciál ábrázolása
-figure_potential = figure; 
+figure_potential = figure('name', 'Potencial'); 
   surf_potential = surf(xx,yy,phi);
   colormap(figure_potential, hot);
-  set(surf_potential, 'edgeColor', 'none', 'faceAlpha', 0.5, 'faceLighting', 'flat');
+  set(surf_potential, 'edgeColor', 'none', 'faceAlpha', 0.7, 'faceLighting', 'flat');
   xlabel('x'); ylabel('y'); 
   zlabel('Phi');
 
-
 % Gamma1 Potenciál  
-figure; 
+figure('name', 'Gamma1 Potencial'); 
 plot(yy(:,1), phi(:,1))
 title('Gamma1 Potenciál');
 xlabel('A tér y koordinátája');
 ylabel('Potenciál(V)');
 % axis([-0.5*10^-3 0.5*10^-3 -1 1]);
 
-
-
-
-
-% Gamma1 Potenciál  
-figure; plot(yy(:,Resolution), phi(:,Resolution))
+% Gamma2 Potenciál  
+figure('name', 'Gamma2 Potencial')
+; plot(yy(:,Resolution), phi(:,Resolution))
 title('Gamma2 Potenciál');
 xlabel('A tér y koordinátája');
 ylabel('Potenciál(V)');
