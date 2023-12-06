@@ -1,5 +1,6 @@
 clc; clear;
-[eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, h, V] = defineConstants();
+
+[eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, hsurf, V] = defineConstants();
 cPMat = chargePositionMatrix();
 
 [G1, b1] = Gamma1(cPMat);
@@ -61,13 +62,14 @@ for vi_x = 1:length(x_vec) % vi = vector index
 end
 
 % A hosszegysegre eso energia
-W_p = eps_0*eps_r*deltaX*deltaY/(Resolution^2)*sum(E_r.^2, "all")*10^-18 ; % J/m
+W_p = 1/2 * eps_0*1e-12*eps_r*deltaX*deltaY/(Resolution^2)*sum(E_r.^2, "all") ; % J/m
 % A hosszegysegre eso kapacitas
-C_p = 2*N1*N2*W_p/(V^2); % F/m
+C_p = 2*N1*N2*W_p/(V^2)*1e12; % pF/m
 
+h = N2*deltaY;
+C_ref = eps_0*1e-12*eps_r* h / d * 1e12; % pF/m
 
-
-
+eps_R_calculated = C_p/C_ref;
 
 %% INNEN ÁBRÁZOLÁS
 
@@ -89,13 +91,18 @@ title('Töltések eloszlása az XY síkon');
 
 % Térerősség vektorok ábrázolása
 figure('name', 'Tererosseg vektorok');
-qui = quiver(x_vec, y_vec, Ex, Ey);
+div = 1;
+terer_x = x_vec(1:div:end);
+terer_y = y_vec(1:div:end);
+terer_Ex = Ex(1:div:end,1:div:end);
+terer_Ey = Ey(1:div:end,1:div:end);
+qui = quiver(terer_x, terer_y, terer_Ex, terer_Ey);
 % set(qui, 'AutoScaleFactor', 10);
 
 % Térerősség abszolútérték ábrázolása
 figure('name', 'E_abs'); 
-  h = surf(xx,yy,E_r );
-  set(h, 'edgeColor', 'none', 'faceAlpha', 0.5, 'faceLighting', 'flat');
+  hsurf = surf(xx,yy,E_r );
+  set(hsurf, 'edgeColor', 'none', 'faceAlpha', 0.5, 'faceLighting', 'flat');
   xlabel('x'); ylabel('y'); 
   zlabel('E');
 
@@ -116,8 +123,8 @@ ylabel('Potenciál(V)');
 % axis([-0.5*10^-3 0.5*10^-3 -1 1]);
 
 % Gamma2 Potenciál  
-figure('name', 'Gamma2 Potencial')
-; plot(yy(:,Resolution), phi(:,Resolution))
+figure('name', 'Gamma2 Potencial');
+plot(yy(:,Resolution), phi(:,Resolution))
 title('Gamma2 Potenciál');
 xlabel('A tér y koordinátája');
 ylabel('Potenciál(V)');

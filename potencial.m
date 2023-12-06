@@ -16,12 +16,14 @@ else
         x_q = cPMat(1,i);
         y_q = cPMat(2,i);
         
+        r_ref = sqrt(x_q^2 + y_q^2);
+
         dx = x-x_q;
         dy = y-y_q;
 
         r = sqrt(dx^2+dy^2);
 
-        dPhi = q_i / (eps_r*eps_0*2*pi) * log(r_0/r);
+        dPhi = q_i / (eps_r*eps_0*2*pi) * log(r_ref/r);
 
         phi = phi + dPhi;
 
