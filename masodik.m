@@ -1,5 +1,18 @@
 clc; clear;
 
+tic;
+
+% Változó ciklus
+global outsideR;
+variables = 5;
+variableVector = linspace(0.03, 0.45, variables);
+
+eps_R_vec = zeros(1, variables);
+rindex = 1;
+for outsideR = variableVector
+
+
+
 [eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, h, V] = defineConstants();
 cPMat = chargePositionMatrix();
 
@@ -72,6 +85,9 @@ C_ref = eps_0*1e-12*eps_r* h / d * 1e12; % pF/m
 
 eps_R_calculated = C_p/C_ref;
 
+
+disp(['Progress: ', num2str(rindex), ' / ', num2str(variables)]);
+disp(['A fémrúd sugara: ', num2str(R), ' mm']);
 disp(['A periodikus struktúrával hangolt kondenzátor hosszegységre eső kapacitása: ', num2str(C_p), ' pF/m']);
 disp(['A periodikus struktúra nélküli kondenzátor hosszegységre eső kapacitása: ', num2str(C_ref), ' pF/m']);
 disp(['Ezek aránya: ', num2str(eps_R_calculated)]);
@@ -103,22 +119,27 @@ terer_y = y_vec(1:div:end);
 terer_Ex = Ex(1:div:end,1:div:end);
 terer_Ey = Ey(1:div:end,1:div:end);
 qui = quiver(terer_x, terer_y, terer_Ex, terer_Ey);
+title('Térerősség vektorok (V/m)', 'FontSize', 12); % Add a title
+xlabel('x (mm)');ylabel('y (mm)');
 % set(qui, 'AutoScaleFactor', 10);
 
 % Térerősség abszolútérték ábrázolása
 figure('name', 'E_abs'); 
   hsurf = surf(xx,yy,E_r );
-  set(hsurf, 'edgeColor', 'none', 'faceAlpha', 0.5, 'faceLighting', 'flat');
-  xlabel('x'); ylabel('y'); 
-  zlabel('E');
+  set(hsurf, 'edgeColor', 'none', 'faceAlpha', 1, 'faceLighting', 'flat');
+  xlabel('x (mm)'); ylabel('y (mm)'); 
+  zlabel('E (V/m)');
+  title('Térerősség nagysága ', 'FontSize', 12); % Add a title
 
 % Potenciál ábrázolása
 figure_potential = figure('name', 'Potencial'); 
   surf_potential = surf(xx,yy,phi);
   colormap(figure_potential, hot);
   set(surf_potential, 'edgeColor', 'none', 'faceAlpha', 0.7, 'faceLighting', 'flat');
-  xlabel('x'); ylabel('y'); 
-  zlabel('Phi');
+  xlabel('x (mm)'); ylabel('y (mm)'); 
+  %% 
+  zlabel('Potenciál (V)');
+  title('Potenciál (V)', 'FontSize', 12);
 
 % Gamma1 Potenciál  
 figure('name', 'Gamma1 Potencial'); 
@@ -135,3 +156,35 @@ title('Gamma2 Potenciál');
 xlabel('A tér y koordinátája');
 ylabel('Potenciál(V)');
 % axis([-0.5*10^-3 0.5*10^-3 -1 1]);
+
+
+
+
+eps_R_vec(rindex) = eps_R_calculated;
+rindex = rindex + 1;
+
+
+% Sugár ciklus vége
+end
+
+figure('name', 'Relatív kapacitás a fémrúd sugarának függvényében');
+hold on;
+
+% plot(radiusVector, eps_R_vec);
+% xlabel('Fémrúd sugara (mm)');
+% ylabel('Relatív hosszegységre eső kapacitás');
+
+
+plot(variableVector, eps_R_vec, 'LineWidth', 2, 'Color', [0.2, 0.4, 0.8]); % Adjust line style and color
+
+xlabel('Fémrúd sugara (mm)', 'FontSize', 12); % Increase font size and make it bold
+ylabel('Relatív hosszegységre eső kapacitás', 'FontSize', 12);
+
+title('Relatív kapacitás', 'FontSize', 12); % Add a title
+
+grid on; % Show grid lines
+
+toc;
+
+
+

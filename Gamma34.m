@@ -25,8 +25,9 @@ Gamma34_Matrix = zeros(2*Resolution, NoC);
 for posi = 1:2*Resolution
     for vi = 1:NoC
         cVec_testing = [zeros(1, vi-1), 1, zeros(1, NoC - vi)];
-        [e_x, e_y, e_z] = tererosseg(Gamma34_x(posi), Gamma34_y(posi), cVec_testing, cPMat);
-        Gamma34_Matrix(posi, vi) = e_y/e_x; % Ez a normalis komponens
+        [e_x, e_y, ~] = tererosseg(Gamma34_x(posi), Gamma34_y(posi), cVec_testing, cPMat);
+        e_r = sqrt(e_x^2+e_y^2);
+        Gamma34_Matrix(posi, vi) = e_y/e_r; % Ez a normalis komponens
     end
 end
 
