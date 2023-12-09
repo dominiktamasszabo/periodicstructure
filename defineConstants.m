@@ -4,7 +4,7 @@ function [eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, de
 eps_r = 1; % Relatív permittivitás [1]
 eps_0 = 8.86; % Vákuum permittivitás [F/mm*10^12] !!! EZ NEM BIZTOS HOGY JÓ !!!!
 phi_0 = 0*2*pi/16*0.5; % Első vonaltöltés szöge [rad]
-K = 40; % Y-ra párhuzamos oldalak (Gamma1, Gamma2) diszkrét pontjainak száma //RES VAN HELYETTE HASZNÁLVA 
+K = 40; % Y-ra párhuzamos oldalak (Gamma1, Gamma2) diszkrét pontjainak száma //RES VAN HELYETTE HASZNÁLVA NEM IS KELLENE IDEÍRNI
 R = 0.3; % A fémhenger sugara [mm]
 c_R = 1/3; % A vonaltöltés-kör sugarának aránya a fémhenger sugarához [1]
 c_B = 4/3; % A külső töltések négyzetének oldalának aránya a cella oldalához

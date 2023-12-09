@@ -1,6 +1,6 @@
 clc; clear;
 
-[eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, hsurf, V] = defineConstants();
+[eps_r, eps_0, M, B, NoC, Resolution, phi_0, K, R, c_R, c_B, deltaX, deltaY, r_0, N1, N2, d, h, V] = defineConstants();
 cPMat = chargePositionMatrix();
 
 [G1, b1] = Gamma1(cPMat);
@@ -8,7 +8,9 @@ cPMat = chargePositionMatrix();
 [G34, b34] = Gamma34(cPMat);
 [GR, bR] = GammaR(cPMat);
 
-S = ones(1,NoC);
+
+% S = ones(1,NoC);
+S = [ones(1,M), zeros(1, NoC-M)];
 A = [S;G1;G2;GR;G34];
 b = [0;b1;b2;bR;b34];
 
@@ -66,10 +68,14 @@ W_p = 1/2 * eps_0*1e-12*eps_r*deltaX*deltaY/(Resolution^2)*sum(E_r.^2, "all") ; 
 % A hosszegysegre eso kapacitas
 C_p = 2*N1*N2*W_p/(V^2)*1e12; % pF/m
 
-h = N2*deltaY;
 C_ref = eps_0*1e-12*eps_r* h / d * 1e12; % pF/m
 
 eps_R_calculated = C_p/C_ref;
+
+disp(['A periodikus struktúrával hangolt kondenzátor hosszegységre eső kapacitása: ', num2str(C_p), ' pF/m']);
+disp(['A periodikus struktúra nélküli kondenzátor hosszegységre eső kapacitása: ', num2str(C_ref), ' pF/m']);
+disp(['Ezek aránya: ', num2str(eps_R_calculated)]);
+
 
 %% INNEN ÁBRÁZOLÁS
 
