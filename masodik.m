@@ -126,11 +126,11 @@ xlabel('x (mm)');ylabel('y (mm)');
 % Térerősség abszolútérték ábrázolása
 figure('name', 'E_abs'); 
   hsurf = surf(xx,yy,E_r );
-  set(hsurf, 'edgeColor', 'none', 'faceAlpha', 1, 'faceLighting', 'flat');
+  set(hsurf, 'edgeColor', 'none', 'faceAlpha', 0.7, 'faceLighting', 'flat');
   xlabel('x (mm)'); ylabel('y (mm)'); 
   zlabel('E (V/m)');
-  title('Térerősség nagysága ', 'FontSize', 12); % Add a title
-
+  title('Térerősség nagysága (V/m) ', 'FontSize', 12); % Add a title
+colorbar;
 % Potenciál ábrázolása
 figure_potential = figure('name', 'Potencial'); 
   surf_potential = surf(xx,yy,phi);
