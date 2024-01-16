@@ -88,7 +88,7 @@ A = [potWeights;forceWeights];
 c = A \ b;
 
 tic;
-num = 20;
+num = 200;
 vec = linspace(-0.5,0.5, num);
 [xx,yy] = meshgrid(vec);
 potential = zeros(num, num);
@@ -142,6 +142,7 @@ for ix = 1:num
   
         if(abs(x) < d/2 && abs(y) < d/2)
             potential(ix, iy) = 0;
+            force(ix, iy) = 0;
         end
     end
 end
@@ -150,6 +151,22 @@ toc;
 
 figure;
 surf( xx, yy,potential);
-% 
-% figure;
-% surf( xx, yy,force);
+
+figure;
+surf( xx, yy,force);
+
+N1=1;
+N2=N1;
+
+% A hosszegysegre eso energia
+W_p = 1/2 * eps0*1e-12*1^2/(num^2)*sum(force.^2, "all") ; % J/m
+% A hosszegysegre eso kapacitas
+C_p = 2*N1*N2*W_p/(1^2)*1e12; % pF/m
+
+C_ref = eps0*1e-12* 1 / 1 * 1e12; % pF/m
+
+eps_R_calculated = C_p/C_ref;
+
+disp(['A periodikus struktúrával hangolt kondenzátor hosszegységre eső kapacitása: ', num2str(C_p), ' pF/m']);
+disp(['A periodikus struktúra nélküli kondenzátor hosszegységre eső kapacitása: ', num2str(C_ref), ' pF/m']);
+disp(['Ezek aránya: ', num2str(eps_R_calculated)]);
