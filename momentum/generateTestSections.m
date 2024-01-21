@@ -1,11 +1,15 @@
 function [potTestSectionBegin, potTestSectionEnd, forceTestSectionBegin, forceTestSectionEnd, sints] = generateTestSections()
 
-cellTestSize = 1;
-cellTestDivs = 6;
+global cellSize;
+global metalSize;
+global voltage;
+
+cellTestSize = cellSize;
+cellTestDivs = 24;
 cellTestOverlap = 0;
 
-metalTestSize = 0.3;
-metalTestDivs = 12;
+metalTestSize = metalSize;
+metalTestDivs = 48;
 metalTestOverlap = 0;
 
 [cellSquareBegin, cellSquareEnd] = generateSquareSections(cellTestSize, cellTestDivs, cellTestOverlap);
@@ -26,7 +30,7 @@ potTestSectionEnd = testSectionEnd(:, cellTestDivs*2+1:length(testSectionBegin))
 
 potIntValues = zeros(length(potTestSectionBegin), 1);
 % Left
-potIntValues(1:cellTestDivs) = 2 * -1;
+potIntValues(1:cellTestDivs) = 2 * voltage / 2;
 % Right
 potIntValues(cellTestDivs+1:2*cellTestDivs) = -1 * potIntValues(1:cellTestDivs);
 

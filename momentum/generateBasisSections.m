@@ -1,12 +1,12 @@
 function [basisSectionBegin, basisSectionEnd] = generateBasisSections()
 
 cellBasisSize = 1.1;
-cellBasisDivs = 4;
-cellBasisOverlap = 0;
+cellBasisDivs = 16;
+cellBasisOverlap = 1;
 
 metalBasisSize = 0.15;
-metalBasisDivs = 1;
-metalBasisOverlap = 0;
+metalBasisDivs = 20;
+metalBasisOverlap = 1;
 
 [cellSquareBegin, cellSquareEnd] = generateSquareSections(cellBasisSize, cellBasisDivs, cellBasisOverlap);
 [metalSquareBegin, metalSquareEnd] = generateSquareSections(metalBasisSize, metalBasisDivs, metalBasisOverlap);
